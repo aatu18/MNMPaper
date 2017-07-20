@@ -1,7 +1,7 @@
 README
 
 HYPHY batch files to run BS+MNM and BS+MNM+k2 models
-These can only be run from the command-line.
+Note: These can only be run from the command-line.
 
 i)   BranchSites_delta_null.bf: YangNielsenBranchSite Null Model with delta
 ii)  BranchSites_delta_alt.bf: YangNielsenBranchSite Alt Model with delta
