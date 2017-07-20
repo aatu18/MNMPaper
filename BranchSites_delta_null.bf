@@ -1,6 +1,7 @@
-/*Estimate parameters under the BS+MNM+k2 null model*/
-filepath = "knownGene.uc001hmo.1.1.test";
-outfile_path = "knownGene.uc001hmo.1.1.test.BS_MNM_k2.null.out";
+/*Run YangNielsenBranchSite Null Model with delta*/
+
+filepath = "<INPUT ALIGNMENT FILE NAME>";
+outfile_path = "<OUTPUT FILE>";
 LoadFunctionLibrary("../../hyphy/res/TemplateBatchFiles/TemplateModels/chooseGeneticCode.def", {"0" : "Universal"});
 DataSet ds = ReadDataFile (filepath);
 DataSetFilter filteredData = CreateFilter (ds,3,"","","TAA,TAG,TGA");
@@ -26,8 +27,6 @@ categRateMatrix = {{1,2,3,4}};
 category site_kind = (rateClasses, categFreqMatrix , MEAN, ,categRateMatrix, 1, 4);
 global kappa_inv;
 global delta;
-global kappa_inv2;
-
 
 /******** Define the evolutionary model *********/
 
@@ -126,15 +125,15 @@ for (h=0; h<64; h=h+1)
 					transition_pos2  = v%16$4; 
                                         transition2_pos2 = h%16$4;
 
-                                        	if (_Genetic_Code[0][h]==_Genetic_Code[0][v]) 
+                                        	if (_Genetic_Code[0][h]==_Genetic_Code[0][v]) /* synonymous */
                                         	{
 				                       if ( ((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos2-transition2_pos2)%2)) || ((((transition_pos1-transition2_pos1)%2) == 0) &&  (((transition_pos2-transition2_pos2)%2) == 0)) ) 
                                                 	{
 
 								if ( (Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos2-transition2_pos2)%2) )
 								{
-								GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2*kappa_inv2;
-                                                        	GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2*kappa_inv2;
+								GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv*kappa_inv;
+                                                        	GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv*kappa_inv;
                                                 		}
 
                                                        		else  /* both transitions */
@@ -146,8 +145,8 @@ for (h=0; h<64; h=h+1)
 							}
 							else  /*transversion and transition*/
 							{
-   							GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2;
+   							GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv;
 
 							}
 
@@ -155,12 +154,12 @@ for (h=0; h<64; h=h+1)
 					   else /* non-synonymous */
                                            {
 
-    						if ( ((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos2-transition2_pos2)%2)) || (((transition_pos1-transition2_pos1)%2 == 0) &&  ((transition_pos2-transition2_pos2)%2 == 0)) ) /* both transversions or both transitions resp*/
+    						if ( ((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos2-transition2_pos2)%2)) || (((transition_pos1-transition2_pos1)%2 == 0) &&  ((transition_pos2-transition2_pos2)%2 == 0)) ) 
                                                 {
                                                         if( (Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos2-transition2_pos2)%2))
 							{
-							GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
+							GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv*kappa_inv;
                                                 	}
 
                                                 	else   /* both transitions */
@@ -173,8 +172,8 @@ for (h=0; h<64; h=h+1)
 
                                                 else  /*transversion and transition*/
                                                 {
-                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv;
 
                                                 }
 
@@ -198,8 +197,8 @@ for (h=0; h<64; h=h+1)
                                                 {
 						 	if( (Abs(transition_pos3-transition2_pos3)%2) &&  (Abs(transition_pos2-transition2_pos2)%2) )
 							{
-                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv*kappa_inv;
                                                 	}
 
                                                       else   /* both transitions */
@@ -211,8 +210,8 @@ for (h=0; h<64; h=h+1)
 
                                                 else
                                                 {
-                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv;
 
                                                 }
 
@@ -224,8 +223,8 @@ for (h=0; h<64; h=h+1)
                                                 {
 							if( (Abs(transition_pos3-transition2_pos3)%2) &&  (Abs(transition_pos2-transition2_pos2)%2) )
 							{
-                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv*kappa_inv;
                                                 	}
                                                 	else /* both transitions */
                                                 	{
@@ -237,8 +236,8 @@ for (h=0; h<64; h=h+1)
 
                                                 else
                                                 {
-                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv;
 
                                                 }
 
@@ -257,12 +256,12 @@ for (h=0; h<64; h=h+1)
 
                                         if (_Genetic_Code[0][h]==_Genetic_Code[0][v]) /* synonymous */
                                         {
-                                                if ( ((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos3-transition2_pos3)%2)) || (((transition_pos1-transition2_pos1)%2 == 0) &&  ((transition_pos3-transition2_pos3)%2 == 0)) )  /* both transversions: difference is not divisible by 2 */
+                                                if ( ((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos3-transition2_pos3)%2)) || (((transition_pos1-transition2_pos1)%2 == 0) &&  ((transition_pos3-transition2_pos3)%2 == 0)) )  
 						{
                                                 	if( (Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos3-transition2_pos3)%2) )
 							{
-                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv*kappa_inv;
                                                 	}
 
                                                  	else  /* both transitions */
@@ -274,8 +273,8 @@ for (h=0; h<64; h=h+1)
 
                                                 else
                                                 {
-                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := synRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := synRate*delta*kappa_inv;
 
                                                 }
 
@@ -287,8 +286,8 @@ for (h=0; h<64; h=h+1)
                                                 {
 							if((Abs(transition_pos1-transition2_pos1)%2) &&  (Abs(transition_pos3-transition2_pos3)%2) )
 							{
-                                                        	GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
-                                                        	GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2*kappa_inv2;
+                                                        	GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv*kappa_inv;
+                                                        	GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv*kappa_inv;
                                                 	}
 
                                                 	else /* both transitions */
@@ -301,8 +300,8 @@ for (h=0; h<64; h=h+1)
 
                                                 else
                                                 {
-                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv2;
-                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv2;
+                                                        GY_Matrix[h-hshift][v-vshift] := nonSynRate*delta*kappa_inv;
+                                                        GY_Matrix[v-vshift][h-hshift] := nonSynRate*delta*kappa_inv;
 
                                                 }
 
@@ -335,7 +334,7 @@ for (h=0; h<64; h=h+1)
 codonFreqs = codonFreqs*(1.0/PIStop);
 Model GY_Model = (GY_Matrix,codonFreqs);
 
-/*get rough starting values */
+/*get rough starting values*/
 
 Tree  givenTree = treeString;
 LikelihoodFunction test_lf = (filteredData, givenTree);
@@ -369,7 +368,6 @@ global omega_BG := (((site_kind==1)+(site_kind==3))*omega_0+(site_kind==2)+(site
 ExecuteCommands ("givenTree."+"hg18"+".nonSynRate:=omega_FG*givenTree."+"hg18"+".synRate;");
 ReplicateConstraint ("this1.?.nonSynRate:=omega_BG*this2.?.synRate",givenTree,givenTree);/*handily impose constraints for all branches*/
 
-
 bNames = BranchName   (givenTree,-1);
 nucBL  = BranchLength (nucTree,-1);
 for (bc=0; bc<Columns(bNames)-1; bc=bc+1)
@@ -392,6 +390,8 @@ LikelihoodFunction lf = (filteredData, givenTree);
 while (1)
 {
 	Optimize 		   (mles,lf);
+
+	LIKELIHOOD_FUNCTION_OUTPUT = 5;
 
 	GetString 		  (lfParameters, lf, -1);
 	glV 		 	= lfParameters["Local Independent"];
@@ -455,11 +455,12 @@ while (1)
 	fprintf (outfile_path, "\nThe estimation procedure appears to have converged.\n");
 	break;
 }
-/*LIKELIHOOD_FUNCTION_OUTPUT = 3;
-fprintf (outfile_path, "Constrained\n\n",lf);*/
 
 LIKELIHOOD_FUNCTION_OUTPUT = 5;
 fprintf (outfile_path, lf);
+
+fprintf(outfile_path, "mles:", mles);
+
 
 fprintf (outfile_path, "\nInferred rate distribution:",
 		  "\n\tClass 0.  omega_0 = ", Format (omega_0, 5,3), " weight = ", Format (P_0,5,3),

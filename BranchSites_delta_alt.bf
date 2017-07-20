@@ -1,4 +1,6 @@
-filepath = "<INPUT ALIGNMENT FILE NAME>";
+/*Run YangNielsenBranchSite Alt Model with delta*/
+
+filepath = "<INPUT ALIGNMENT FILE>";
 outfile_path = "<OUTPUT FILE NAME>";
 LoadFunctionLibrary("../../hyphy/res/TemplateBatchFiles/TemplateModels/chooseGeneticCode.def", {"0" : "Universal"});
 DataSet ds = ReadDataFile (filepath);
@@ -25,6 +27,7 @@ categRateMatrix = {{1,2,3,4}};
 category site_kind = (rateClasses, categFreqMatrix , MEAN, ,categRateMatrix, 1, 4);
 global kappa_inv;
 global delta;
+global omega_2;
 
 /******** Define the evolutionary model *********/
 
@@ -357,21 +360,16 @@ LIKELIHOOD_FUNCTION_OUTPUT = 3;
 
 global omega_0;
 omega_0 :< 1;
-
-/****** Note this code is for running the null model; if you want to run the positive selection mode, init w2 as follows ******/
-/****** global omega_2;*******/ 
-/****** omega_2 :>1;  ********/
+omega_2 :>1;  
 
 ClearConstraints (givenTree);
-global omega_FG := ((site_kind==1)*omega_0+(site_kind==2)+(site_kind>2)); /* foreground model */
+
+global omega_FG := ((site_kind==1)*omega_0+(site_kind==2)+(site_kind>2)*omega_2); /*foreground model*/
 global omega_BG := (((site_kind==1)+(site_kind==3))*omega_0+(site_kind==2)+(site_kind==4)); /* background model */
 
 /* apply the model to all branches */
 ExecuteCommands ("givenTree."+"hg18"+".nonSynRate:=omega_FG*givenTree."+"hg18"+".synRate;");
 ReplicateConstraint ("this1.?.nonSynRate:=omega_BG*this2.?.synRate",givenTree,givenTree);/*handily impose constraints for all branches*/
-
-/***** for the positive selection model, change the foreground model as follows ********/
-/***** global omega_FG := ((site_kind==1)*omega_0+(site_kind==2)+(site_kind>2)*omega_2);********/
 
 bNames = BranchName   (givenTree,-1);
 nucBL  = BranchLength (nucTree,-1);
@@ -460,11 +458,11 @@ while (1)
 	fprintf (outfile_path, "\nThe estimation procedure appears to have converged.\n");
 	break;
 }
-/*LIKELIHOOD_FUNCTION_OUTPUT = 3;
-fprintf (outfile_path, "Constrained\n\n",lf);*/
 
 LIKELIHOOD_FUNCTION_OUTPUT = 5;
 fprintf (outfile_path, lf);
+
+fprintf(outfile_path, "mles:", mles);
 
 fprintf (outfile_path, "\nInferred rate distribution:",
 		  "\n\tClass 0.  omega_0 = ", Format (omega_0, 5,3), " weight = ", Format (P_0,5,3),

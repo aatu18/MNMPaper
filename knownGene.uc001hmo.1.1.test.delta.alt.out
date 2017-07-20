@@ -1,0 +1,47 @@
+
+Checking for convergence by Latin Hypercube Sampling (this may take a bit of time...)
+
+The estimation procedure appears to have converged.
+
+global kappa_inv=0.2775155584040682;
+global delta=0.07374982738577565;
+givenTree.hg18.synRate=0.001311054275585709;
+givenTree.panTro2.synRate=0.1879359184601136;
+givenTree.Node2.synRate=0.3341309301056112;
+givenTree.rheMac2.synRate=0.8121270232042003;
+givenTree.Node1.synRate=3.920609851090245;
+givenTree.mm8.synRate=4.554092221764238;
+givenTree.rn4.synRate=3.874603590772728;
+givenTree.Node6.synRate=15.31116117511359;
+givenTree.canFam2.synRate=5.001606461606302;
+global omega_0=0.0323644398332501;
+omega_0:<1;
+global omega_2=9999.999999998339;
+omega_2:>1;
+global P_1_aux=0.01794348650069786;
+global P_0=0.9761639872964453;
+P_0:<1;
+givenTree.panTro2.nonSynRate:=omega_BG*givenTree.panTro2.synRate;
+givenTree.Node2.nonSynRate:=omega_BG*givenTree.Node2.synRate;
+givenTree.hg18.nonSynRate:=omega_FG*givenTree.hg18.synRate;
+global P_1:=Min(P_1_aux,1-P_0);
+P_1:<1;
+givenTree.rheMac2.nonSynRate:=omega_BG*givenTree.rheMac2.synRate;
+givenTree.Node1.nonSynRate:=omega_BG*givenTree.Node1.synRate;
+givenTree.mm8.nonSynRate:=omega_BG*givenTree.mm8.synRate;
+givenTree.rn4.nonSynRate:=omega_BG*givenTree.rn4.synRate;
+givenTree.Node6.nonSynRate:=omega_BG*givenTree.Node6.synRate;
+givenTree.canFam2.nonSynRate:=omega_BG*givenTree.canFam2.synRate;
+global omega_FG:=(site_kind==1)*omega_0+(site_kind==2)+(site_kind>2)*omega_2;
+global omega_BG:=((site_kind==1)+(site_kind==3))*omega_0+(site_kind==2)+(site_kind==4);
+Tree givenTree=(((hg18:0.001706615016290729,panTro2:0.001617227175736628)Node2:0.002875265275784066,rheMac2:0.006988519825467372)Node1:0.03373765296488309,(mm8:0.03918889886613678,rn4:0.03334175964630336)Node6:0.1317556864454972,canFam2:0.04303985080832929);
+mles:
+{{    0.27751556,   0.073749827,  0.0013110543,    0.18793592,    0.33413093,    0.81212702,     3.9206099,     4.5540922,     3.8746036,     15.311161,     5.0016065,    0.03236444,         10000,   0.017943487,    0.97616399,    0.18793592,    0.33413093,     13.110543,   0.017943487,    0.81212702,     3.9206099,     4.5540922,     3.8746036,     15.311161,     5.0016065,         10000,             1}
+{    -4378.1163,            15,             2,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0,             0}
+}
+
+Inferred rate distribution:
+	Class 0.  omega_0 = 0.032 weight = 0.976
+	Class 1.  omega  := 1.000 weight = 0.018
+	Class 2a. Background omega_0 = 0.032 foreground omega_2 = 1.000 weight = 0.006
+	Class 2b. Background omega  := 1.000 foreground omega_2 = 1.000 weight = 0.000
