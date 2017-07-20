@@ -1,6 +1,6 @@
 README
 
-HYPHY batch files to run the BS+MNM test and BS+MNM+k2 model
+HYPHY batch files to run the BS+delta test and BS+MNM+k2 model
 Note: These can only be run from the command-line.
 
 i)   BranchSites_delta_null.bf: YangNielsenBranchSite Null Model with delta
